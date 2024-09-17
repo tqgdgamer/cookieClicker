@@ -39,42 +39,53 @@ def get_user_stats(user_id):
 
 # button
 class CCButton(discord.ui.View):
-    def __init__(self):
+    def __init__(self, author_id = int):
         super().__init__(timeout=None)
+        self.author_id = author_id
         self.value = None
         
     @discord.ui.button(label="🍪", style=discord.ButtonStyle.blurple, custom_id='persistent_view:CC')
     async def menu1(self, interaction: discord.Interaction,  button: discord.ui.Button):
         
-        user_id = interaction.user.id
-        username = str(interaction.user)
-
-        stats = get_user_stats(user_id)
-        
-        if stats:
-            score, money = stats
-        else:
-            score, money = 0,0
-        
-        score += 1
-
-        add_or_update_user(user_id, username, score, money)
-        
-        embed = discord.Embed(
-            title='Cookie Clicker v1',
-            description=f'You have clicked **{score}** times!\n\nYou have accumulated **${money}**.',
-            colour=discord.Colour.blue()
-        )
-
-        if score >= 100:
+        if interaction.user.id != self.author_id:
 
             embed = discord.Embed(
+                title='Sorry! This is someone\'s button!',
+                colour=discord.Colour.red()
+            )
+
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        else:
+            user_id = interaction.user.id
+            username = str(interaction.user)
+
+            stats = get_user_stats(user_id)
+            
+            if stats:
+                score, money = stats
+            else:
+                score, money = 0,0
+            
+            score += 1
+
+            add_or_update_user(user_id, username, score, money)
+            
+            embed = discord.Embed(
                 title='Cookie Clicker v1',
-                description=f'🍪 You have clicked **{score}** times!\n\nYou have accumulated **${money}**.\n\ntest',
+                description=f'You have clicked **{score}** times!\n\nYou have accumulated **${money}**.',
                 colour=discord.Colour.blue()
             )
-        
-        await interaction.response.edit_message(embed=embed)
+
+            if score >= 100:
+
+                embed = discord.Embed(
+                    title='Cookie Clicker v1',
+                    description=f'🍪 You have clicked **{score}** times!\n\nYou have accumulated **${money}**.\n\ntest',
+                    colour=discord.Colour.blue()
+                )
+            
+            await interaction.response.edit_message(embed=embed)
 
 # cmd    
 class play(commands.Cog):
@@ -87,7 +98,7 @@ class play(commands.Cog):
 
     @app_commands.command(name="play", description="Create a button and start clicking!")
     async def play(self, interaction: discord.Interaction):
-        view = CCButton()
+        view = CCButton(interaction.user.id)
         embed = discord.Embed(
             title = "Click the 🍪 below to begin playing!",
             colour = discord.Colour.blue()
