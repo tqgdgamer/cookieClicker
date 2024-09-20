@@ -11,6 +11,7 @@ A simulation game on discord about clicking to make cookies. Made with [discord.
 |------------------------  |--------------|
 | Play | ✅ |
 | Sell | ✅ |
+| Leaderboard | ✅ |
 
 
 * Run `git clone https://github.com/tqgdgamer/cookieClicker.git` to clone the repository.

@@ -85,3 +85,4 @@ class sell(commands.Cog):
 
 async def setup(client: commands.Bot):
     await client.add_cog(sell(client), guilds=client.guilds)
+    
