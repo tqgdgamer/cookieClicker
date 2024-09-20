@@ -60,7 +60,7 @@ def fetch_leaderboard():
     return result
 
 class leaderboardButton(discord.ui.View):
-    def __init__(self, embeds):
+    def __init__(self, embeds = pages):
         super().__init__(timeout=None)
         self.embeds = embeds
         self.current_page = 0
@@ -148,8 +148,6 @@ class leaderboard(commands.Cog):
     
         await interaction.response.send_message(embed=pages[0],view=view)
         self.leaderboard_message = await interaction.original_response()
-
-        print(self.leaderboard_message)
 
 async def setup(client: commands.Bot):
     await client.add_cog(leaderboard(client), guilds=client.guilds)
