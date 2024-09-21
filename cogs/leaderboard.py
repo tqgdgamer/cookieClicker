@@ -116,21 +116,28 @@ class leaderboard(commands.Cog):
             print("Not found")
 
     async def update_leaderboard_message(self):
-        
-        result = fetch_leaderboard()
-        
-        for embed in pages:
-            embed.clear_fields()
+        try:
+            if self.leaderboard_message is None:
+                print("No leaderboard message exists.")
+                return
+            
+            result = fetch_leaderboard()
+            
+            for embed in pages:
+                embed.clear_fields()
 
-        for i, (user_id, username, score) in enumerate(result, start=1):
-            if i <= 10:
-                pages[0].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
-            elif i <= 20 and i > 10:
-                pages[1].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
-            elif i <= 30 and i > 20:
-                pages[2].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+            for i, (user_id, username, score) in enumerate(result, start=1):
+                if i <= 10:
+                    pages[0].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+                elif i <= 20 and i > 10:
+                    pages[1].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+                elif i <= 30 and i > 20:
+                    pages[2].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
 
-        await self.leaderboard_message.edit(embed=pages[0])
+            await self.leaderboard_message.edit(embed=pages[0])
+
+        except Exception as e:
+            print(f"Error updating leaderboard: {e}")
 
     @update_leaderboard.before_loop
     async def before_update_leaderboard(self):
