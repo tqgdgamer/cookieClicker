@@ -13,9 +13,6 @@ cursor.execute('''
 ''')
 result = cursor.fetchall()
 
-user_id1, username1, score1 = result[0]
-user_id2, username2, score2 = result[1]
-
 errorEmbed = discord.Embed(
     title='Error',
     description='<:error:1285808346573836289> You can not click on the button!',
@@ -24,17 +21,17 @@ errorEmbed = discord.Embed(
 
 pages = [
     discord.Embed(
-        title='Cookie Leaderboard (#1-10)',
+        title='<:top:1287522473411088476> Cookie Leaderboard (#1-10)',
         description='Use the buttons below to switch pages',
         colour=discord.Colour.blue()
         ),
     discord.Embed(
-        title='Cookie Leaderboard (#11-20)',
+        title='<:top:1287522473411088476> Cookie Leaderboard (#11-20)',
         description='Use the buttons below to switch pages',
         colour=discord.Colour.blue()
         ),
     discord.Embed(
-        title='Cookie Leaderboard (#21-30)',
+        title='<:top:1287522473411088476> Cookie Leaderboard (#21-30)',
         description='Use the buttons below to switch pages',
         colour=discord.Colour.blue()
         ),
@@ -42,11 +39,11 @@ pages = [
 
 for i, (user_id, username, score) in enumerate(result, start=1):
     if i <= 10:
-        pages[0].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+        pages[0].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: **{score}**', inline=False)
     elif i <= 20 and i > 10:
-        pages[1].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+        pages[1].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: **{score}**', inline=False)
     elif i <= 30 and i > 20:
-        pages[2].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+        pages[2].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: **{score}**', inline=False)
 
 def fetch_leaderboard():
     conn = sqlite3.connect('users.db')
@@ -155,6 +152,7 @@ class leaderboard(commands.Cog):
     
         await interaction.response.send_message(embed=pages[0],view=view)
         self.leaderboard_message = await interaction.original_response()
+        await self.update_leaderboard_message()
 
 async def setup(client: commands.Bot):
     await client.add_cog(leaderboard(client), guilds=client.guilds)
