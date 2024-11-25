@@ -23,17 +23,17 @@ pages = [
     discord.Embed(
         title='<:top:1287522473411088476> Cookie Leaderboard (#1-10)',
         description='Use the buttons below to switch pages',
-        colour=discord.Colour.blue()
+        colour=discord.Colour.from_str("#946fff")
         ),
     discord.Embed(
         title='<:top:1287522473411088476> Cookie Leaderboard (#11-20)',
         description='Use the buttons below to switch pages',
-        colour=discord.Colour.blue()
+        colour=discord.Colour.from_str("#946fff")
         ),
     discord.Embed(
         title='<:top:1287522473411088476> Cookie Leaderboard (#21-30)',
         description='Use the buttons below to switch pages',
-        colour=discord.Colour.blue()
+        colour=discord.Colour.from_str("#946fff")
         ),
 ]
 

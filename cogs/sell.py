@@ -67,8 +67,8 @@ class sell(commands.Cog):
     
             embed = discord.Embed(
                 title = "Sell Alert!",
-                description = f"You have sold {amount} cookies! for ${amount}. You now have {score} cookies left!",
-                colour = discord.Colour.blue()
+                description = f"<:checkmark:1287522486845575261> You have sold **{amount}** cookie(s)! for **${amount}**. You now have **{score}** cookies left!",
+                colour = discord.Colour.green()
             )
 
             await interaction.response.send_message(embed=embed)
@@ -77,7 +77,7 @@ class sell(commands.Cog):
 
             embed = discord.Embed(
                 title = "Error!",
-                description = f"You don't have that amount of cookies silly!",
+                description = f"<:error:1285808346573836289> You don't have that amount of cookies silly!",
                 colour = discord.Colour.red()
             )
 
