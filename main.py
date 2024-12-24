@@ -52,7 +52,6 @@ class cookieClicker(commands.Bot):
         self.initial_extensions = [
             "cogs.ping",
             "cogs.play",
-            "cogs.sell",
             "cogs.leaderboard"
         ]     
 

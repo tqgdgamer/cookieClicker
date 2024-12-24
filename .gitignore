@@ -2,3 +2,4 @@ cogs/__pycache__/
 .env
 users.db
 CCButtonUsers.db
+CCShop.db

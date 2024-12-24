@@ -13,8 +13,7 @@ cursor.execute('''
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY,
         username TEXT,
-        score INTEGER,
-        money INTEGER
+        score INTEGER
     )
 ''')
 conn.commit()
@@ -32,13 +31,13 @@ cursor2.execute('''
 conn2.commit()
 
 # add/update user data
-def add_or_update_user(user_id, username, score, money):
+def add_or_update_user(user_id, username, score):
     cursor.execute('''
-        INSERT INTO users (user_id, username, score, money)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO users (user_id, username, score)
+        VALUES (?, ?, ?)
         ON CONFLICT(user_id) 
-        DO UPDATE SET username = excluded.username, score = excluded.score, money = excluded.money
-    ''', (user_id, username, score, money))
+        DO UPDATE SET username = excluded.username, score = excluded.score
+    ''', (user_id, username, score))
     conn.commit()
 
 def add_cc_user(user_id, button_id):
@@ -51,11 +50,11 @@ def add_cc_user(user_id, button_id):
 
 # pull user data
 def get_user_stats(user_id):
-    cursor.execute('SELECT score, money FROM users WHERE user_id = ?', (user_id,))
+    cursor.execute('SELECT score FROM users WHERE user_id = ?', (user_id,))
     result = cursor.fetchone()
     if result:
-        score, money = result[0], result[1]
-        return score, money
+        score = result[0]
+        return score
     return None
 
 def get_cc_user(button_id):
@@ -82,17 +81,17 @@ class CCButton(discord.ui.View):
             stats = get_user_stats(user_id)
             
             if stats:
-                score, money = stats
+                score = stats
             else:
-                score, money = 0,0
+                score = 0
             
             score += 1
 
-            add_or_update_user(user_id, username, score, money)
+            add_or_update_user(user_id, username, score)
             
             embed = discord.Embed(
                 title='Cookie Clicker v1',
-                description=f'You have clicked **{score}** times!\n\nYou have accumulated **${money}**.',
+                description=f'You have clicked **{score}** times!',
                 colour=discord.Colour.blue()
             )
             
@@ -133,4 +132,4 @@ class play(commands.Cog):
 
 async def setup(client: commands.Bot):
     await client.add_cog(play(client), guilds=client.guilds)
-    
+ 
