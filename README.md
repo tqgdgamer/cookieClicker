@@ -10,7 +10,7 @@ A simulation game on discord about clicking to make cookies. Made with [discord.
 | Feature Name                | Implemented  |
 |------------------------  |--------------|
 | Play | ✅ |
-| Sell | ✅ |
+| Ping | ✅ |
 | Leaderboard | ✅ |
 
 
