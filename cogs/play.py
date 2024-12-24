@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 import sqlite3
 import uuid
+import random
 
 client = commands.Bot(command_prefix="cc.", intents=discord.Intents.all())
 
@@ -74,6 +75,8 @@ class CCButton(discord.ui.View):
 
         owner_id = get_cc_user(self.button_id)
 
+        bonus = random.randint(1, 1000000)
+
         if interaction.user.id == owner_id:
             user_id = interaction.user.id
             username = str(interaction.user)
@@ -90,12 +93,51 @@ class CCButton(discord.ui.View):
             add_or_update_user(user_id, username, score)
             
             embed = discord.Embed(
-                title='Cookie Clicker v1',
+                title='Cookie Clicker v1.1',
                 description=f'You have clicked **{score}** times!',
                 colour=discord.Colour.blue()
             )
             
             await interaction.response.edit_message(embed=embed)
+
+            if bonus <= 1000:
+                bonus_score = random.randint(101, 1000)
+                score += bonus_score
+
+                add_or_update_user(user_id, username, score)
+
+                bonus_embed = discord.Embed(
+                    description=f"**Bonus!!**\n\nRarity: Rare\n\nYou earned an additional **{bonus_score}** cookies!",
+                    colour=discord.Colour.green()
+                )
+
+                await interaction.followup.send(embed=bonus_embed, ephemeral=True)
+
+            elif bonus <= 10000:
+                bonus_score = random.randint(11, 100)
+                score += bonus_score
+
+                add_or_update_user(user_id, username, score)
+
+                bonus_embed = discord.Embed(
+                    description=f"**Bonus!!**\n\nRarity: Uncommon\n\nYou earned an additional **{bonus_score}** cookies!",
+                    colour=discord.Colour.green()
+                )
+
+                await interaction.followup.send(embed=bonus_embed, ephemeral=True)
+
+            elif bonus <= 100000:
+                bonus_score = random.randint(2, 10)
+                score += bonus_score
+
+                add_or_update_user(user_id, username, score)
+
+                bonus_embed = discord.Embed(
+                    description=f"**Bonus!!**\n\nRarity: Common\n\nYou earned an additional **{bonus_score}** cookies!",
+                    colour=discord.Colour.green()
+                )
+
+                await interaction.followup.send(embed=bonus_embed, ephemeral=True)
 
         else:
 

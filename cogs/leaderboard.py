@@ -125,11 +125,11 @@ class leaderboard(commands.Cog):
 
             for i, (user_id, username, score) in enumerate(result, start=1):
                 if i <= 10:
-                    pages[0].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+                    pages[0].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: **{score}**', inline=False)
                 elif i <= 20 and i > 10:
-                    pages[1].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+                    pages[1].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: **{score}**', inline=False)
                 elif i <= 30 and i > 20:
-                    pages[2].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: {score}', inline=False)
+                    pages[2].add_field(name=f'#{i}', value=f'<@{user_id}> | {username} | Cookies: **{score}**', inline=False)
 
             await self.leaderboard_message.edit(embed=pages[0])
 
