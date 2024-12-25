@@ -10,26 +10,8 @@ client = commands.Bot(command_prefix="cc.", intents=discord.Intents.all())
 conn = sqlite3.connect('users.db')
 cursor = conn.cursor()
 
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        user_id INTEGER PRIMARY KEY,
-        username TEXT,
-        score INTEGER
-    )
-''')
-conn.commit()
-
 conn2 = sqlite3.connect('CCButtonUsers.db')
 cursor2 = conn2.cursor()
-
-cursor2.execute('''
-    CREATE TABLE IF NOT EXISTS CCButtonUsers (
-        user_id INTEGER,
-        button_id TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP                   
-    )
-''')
-conn2.commit()
 
 # add/update user data
 def add_or_update_user(user_id, username, score):
@@ -94,7 +76,7 @@ class CCButton(discord.ui.View):
             
             embed = discord.Embed(
                 title='Cookie Clicker v1.1',
-                description=f'You have clicked **{score}** times!',
+                description=f'You have accumulated **{score}** cookies!',
                 colour=discord.Colour.blue()
             )
             
@@ -107,7 +89,8 @@ class CCButton(discord.ui.View):
                 add_or_update_user(user_id, username, score)
 
                 bonus_embed = discord.Embed(
-                    description=f"**Bonus!!**\n\nRarity: Rare\n\nYou earned an additional **{bonus_score}** cookies!",
+                    title="Bonus!",
+                    description=f"\n\n<:alert:1287522413935853721> Rarity: **Rare** | 0.1% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
                     colour=discord.Colour.green()
                 )
 
@@ -120,7 +103,8 @@ class CCButton(discord.ui.View):
                 add_or_update_user(user_id, username, score)
 
                 bonus_embed = discord.Embed(
-                    description=f"**Bonus!!**\n\nRarity: Uncommon\n\nYou earned an additional **{bonus_score}** cookies!",
+                    title="Bonus!",
+                    description=f"\n\n<:alert:1287522413935853721> Rarity: **Uncommon** | 1% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
                     colour=discord.Colour.green()
                 )
 
@@ -133,7 +117,8 @@ class CCButton(discord.ui.View):
                 add_or_update_user(user_id, username, score)
 
                 bonus_embed = discord.Embed(
-                    description=f"**Bonus!!**\n\nRarity: Common\n\nYou earned an additional **{bonus_score}** cookies!",
+                    title="Bonus!",
+                    description=f"\n\n<:alert:1287522413935853721> Rarity: **Common** | 10% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
                     colour=discord.Colour.green()
                 )
 

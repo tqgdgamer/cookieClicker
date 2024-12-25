@@ -12,6 +12,17 @@ import cogs.leaderboard as lb
 
 load_dotenv()
 
+conn = sqlite3.connect('users.db')
+cursor = conn.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT,
+        score INTEGER
+    )
+''')
+conn.commit()
+
 conn2 = sqlite3.connect('CCButtonUsers.db')
 cursor2 = conn2.cursor()
 
