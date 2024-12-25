@@ -15,35 +15,48 @@ cursor2 = conn2.cursor()
 
 # add/update user data
 def add_or_update_user(user_id, username, score):
-    cursor.execute('''
-        INSERT INTO users (user_id, username, score)
-        VALUES (?, ?, ?)
-        ON CONFLICT(user_id) 
-        DO UPDATE SET username = excluded.username, score = excluded.score
-    ''', (user_id, username, score))
-    conn.commit()
+    try:
+        cursor.execute('''
+            INSERT INTO users (user_id, username, score)
+            VALUES (?, ?, ?)
+            ON CONFLICT(user_id) 
+            DO UPDATE SET username = excluded.username, score = excluded.score
+        ''', (user_id, username, score))
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
 
 def add_cc_user(user_id, button_id):
-    cursor2.execute('''
-        INSERT INTO CCButtonUsers (user_id, button_id)
-        VALUES (?, ?)
-
-    ''', (user_id, button_id))
-    conn2.commit()
+    try:
+        cursor2.execute('''
+            INSERT INTO CCButtonUsers (user_id, button_id)
+            VALUES (?, ?)
+        ''', (user_id, button_id))
+        conn2.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
 
 # pull user data
 def get_user_stats(user_id):
-    cursor.execute('SELECT score FROM users WHERE user_id = ?', (user_id,))
-    result = cursor.fetchone()
-    if result:
-        score = result[0]
-        return score
-    return None
+    try:
+        cursor.execute('SELECT score FROM users WHERE user_id = ?', (user_id,))
+        result = cursor.fetchone()
+        if result:
+            score = result[0]
+            return score
+        return None
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return None
 
 def get_cc_user(button_id):
-    cursor2.execute('SELECT user_id FROM CCButtonUsers WHERE button_id = ?', (button_id,))
-    result = cursor2.fetchone()
-    return result[0] if result else None
+    try:
+        cursor2.execute('SELECT user_id FROM CCButtonUsers WHERE button_id = ?', (button_id,))
+        result = cursor2.fetchone()
+        return result[0] if result else None
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return None
 
 # button
 class CCButton(discord.ui.View):
@@ -91,7 +104,7 @@ class CCButton(discord.ui.View):
                 bonus_embed = discord.Embed(
                     title="Bonus!",
                     description=f"\n\n<:alert:1287522413935853721> Rarity: **Rare** | 0.1% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
-                    colour=discord.Colour.green()
+                    colour=discord.Colour.yellow()
                 )
 
                 await interaction.followup.send(embed=bonus_embed, ephemeral=True)
@@ -105,7 +118,7 @@ class CCButton(discord.ui.View):
                 bonus_embed = discord.Embed(
                     title="Bonus!",
                     description=f"\n\n<:alert:1287522413935853721> Rarity: **Uncommon** | 1% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
-                    colour=discord.Colour.green()
+                    colour=discord.Colour.yellow()
                 )
 
                 await interaction.followup.send(embed=bonus_embed, ephemeral=True)
@@ -119,7 +132,7 @@ class CCButton(discord.ui.View):
                 bonus_embed = discord.Embed(
                     title="Bonus!",
                     description=f"\n\n<:alert:1287522413935853721> Rarity: **Common** | 10% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
-                    colour=discord.Colour.green()
+                    colour=discord.Colour.yellow()
                 )
 
                 await interaction.followup.send(embed=bonus_embed, ephemeral=True)

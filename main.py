@@ -12,44 +12,56 @@ import cogs.leaderboard as lb
 
 load_dotenv()
 
-conn = sqlite3.connect('users.db')
-cursor = conn.cursor()
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        user_id INTEGER PRIMARY KEY,
-        username TEXT,
-        score INTEGER
-    )
-''')
-conn.commit()
+try:
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY,
+            username TEXT,
+            score INTEGER
+        )
+    ''')
+    conn.commit()
 
-conn2 = sqlite3.connect('CCButtonUsers.db')
-cursor2 = conn2.cursor()
-
-cursor2.execute('''
-    CREATE TABLE IF NOT EXISTS CCButtonUsers (
-        user_id INTEGER,
-        button_id TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP                  
-    )
-''')
-conn2.commit()
-
-def retrieve_button_ids():
-    cursor2.execute('SELECT button_id FROM CCButtonUsers')
-    result = cursor2.fetchall()
-    return [row[0] for row in result]
-
-def purge_old_buttons():
-    two_weeks = (datetime.now() - timedelta(weeks=2)).strftime('%Y-%m-%d %H:%M:%S')
+    conn2 = sqlite3.connect('CCButtonUsers.db')
+    cursor2 = conn2.cursor()
 
     cursor2.execute('''
-        DELETE FROM CCButtonUsers WHERE created_at < ?
-    ''', (two_weeks,))
-
+        CREATE TABLE IF NOT EXISTS CCButtonUsers (
+            user_id INTEGER,
+            button_id TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP                  
+        )
+    ''')
     conn2.commit()
+except sqlite3.Error as e:
+    print(f"Database error: {e}")
+except Exception as e:
+    print(f"Exception in _query: {e}")
 
-    print(f"Purged buttons older than {two_weeks}")
+def retrieve_button_ids():
+    try:
+        cursor2.execute('SELECT button_id FROM CCButtonUsers')
+        result = cursor2.fetchall()
+        return [row[0] for row in result]
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return []
+
+def purge_old_buttons():
+    try:
+        two_weeks = (datetime.now() - timedelta(weeks=2)).strftime('%Y-%m-%d %H:%M:%S')
+
+        cursor2.execute('''
+            DELETE FROM CCButtonUsers WHERE created_at < ?
+        ''', (two_weeks,))
+
+        conn2.commit()
+
+        print(f"Purged buttons older than {two_weeks}")
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
 
 
 class cookieClicker(commands.Bot):
