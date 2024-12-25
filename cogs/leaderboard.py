@@ -139,9 +139,6 @@ class leaderboard(commands.Cog):
         except Exception as e:
             print(f"Error updating leaderboard message: {e}")
 
-        except Exception as e:
-            print(f"Error updating leaderboard: {e}")
-
     @update_leaderboard.before_loop
     async def before_update_leaderboard(self):
         print("Waiting for bot to come online before leaderboard update...")
