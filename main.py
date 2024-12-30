@@ -35,6 +35,12 @@ try:
         )
     ''')
     conn2.commit()
+
+    cursor.execute('''
+        DROP TABLE IF EXISTS shop
+                   ''')
+    conn.commit()
+
 except sqlite3.Error as e:
     print(f"Database error: {e}")
 except Exception as e:
@@ -75,7 +81,8 @@ class cookieClicker(commands.Bot):
         self.initial_extensions = [
             "cogs.ping",
             "cogs.play",
-            "cogs.leaderboard"
+            "cogs.leaderboard",
+            "cogs.shop"
         ]     
 
     async def setup_hook(self):

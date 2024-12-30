@@ -83,12 +83,33 @@ class CCButton(discord.ui.View):
             else:
                 score = 0
             
-            score += 1
+            cursor.execute('SELECT item_id FROM user_items WHERE user_id = ? AND purchased = 1', (user_id,))
+            items = cursor.fetchall()
+
+            multiplier = 1
+            value = 1
+            for item in items:
+                item_id = item[0]
+                if item_id == 3:
+                    multiplier = 4
+                elif item_id == 2:
+                    multiplier = 3
+                elif item_id == 1:
+                    multiplier = 2
+
+                if item_id == 6:
+                    value = 10
+                elif item_id == 5:
+                    value = 5
+                elif item_id == 4:
+                    value = 2
+
+            score += value * multiplier
 
             add_or_update_user(user_id, username, score)
             
             embed = discord.Embed(
-                title='Cookie Clicker v1.1',
+                title='Cookie Clicker v1.2',
                 description=f'You have accumulated **{score}** cookies!',
                 colour=discord.Colour.blue()
             )
