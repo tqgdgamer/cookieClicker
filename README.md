@@ -1,5 +1,9 @@
 ## Cookie Clicker
-A simulation game on discord about clicking to make cookies. Made with [discord.py](https://github.com/Rapptz/discord.py)
+A simulation game on discord for you to feel the satisfaction of your cookies increase at every click.
+
+[Add the bot](https://discord.com/oauth2/authorize?client_id=1285399074056573020) to your server to continue the addiction! Aim high and reach the top of the leaderboards.
+
+Made with [discord.py](https://github.com/Rapptz/discord.py)
 
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/) 
 
@@ -9,9 +13,10 @@ A simulation game on discord about clicking to make cookies. Made with [discord.
 
 | Feature Name                | Implemented  |
 |------------------------  |--------------|
+| Leaderboard | ✅ |
 | Play | ✅ |
 | Ping | ✅ |
-| Leaderboard | ✅ |
+| Shop | ✅ |
 
 
 * Run `git clone https://github.com/tqgdgamer/cookieClicker.git` to clone the repository.
