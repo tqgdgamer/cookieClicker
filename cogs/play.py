@@ -109,7 +109,7 @@ class CCButton(discord.ui.View):
             add_or_update_user(user_id, username, score)
             
             embed = discord.Embed(
-                title='Cookie Clicker v1.2',
+                title='Cookie Clicker v1.3',
                 description=f'You have accumulated **{score}** cookies!',
                 colour=discord.Colour.blue()
             )
