@@ -106,10 +106,11 @@ class leaderboard(commands.Cog):
     async def update_leaderboard(self):
         try:
             self.leaderboard_data = fetch_leaderboard()
-            print("Updated leaderboard.")
 
             if self.leaderboard_message:
                 await self.update_leaderboard_message()
+                print("Updated leaderboard.")
+                
             else:
                 print("Leaderboard message not found.")
         except Exception as e:
