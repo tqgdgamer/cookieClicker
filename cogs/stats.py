@@ -47,6 +47,7 @@ class stats(commands.Cog):
             value = 1
             name_m = "None"
             name_v = "None"
+            super_bonus = False
 
             for item in items:
                 item_id = item[0]
@@ -70,11 +71,19 @@ class stats(commands.Cog):
                     value = 2
                     name_v = "Organic Butter"
 
+                if item_id == 7:
+                    super_bonus = True
+        
+            super_bonus_icon = "<:error:1285808346573836289>"
+
+            if super_bonus is True:
+                super_bonus_icon = "<:checkmark:1287522486845575261>"
+
         except sqlite3.Error as e:
             print(f"Database error: {e}")
 
         embed = discord.Embed(
-            description = f"# {user_name}'s Stats\n<:alert:1287522413935853721> **Cookies:** {score[0]}\n## Best Cookie Buffs:\n**{name_m}** | Multiplier: **{multiplier}x**\n**{name_v}** | Cookies Per Click: **{value} cookies**",
+            description = f"# {user_name}'s Stats\n<:alert:1287522413935853721> **Cookies:** {score[0]}\n## Best Cookie Buffs:\n**Chance Formula** | {super_bonus_icon}\n**{name_m}** | Multiplier: **{multiplier}x**\n**{name_v}** | Cookies Per Click: **{value} cookies**",
             colour = discord.Colour.from_str("#ff6b00")
         )
 

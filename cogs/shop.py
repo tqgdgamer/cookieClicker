@@ -40,7 +40,8 @@ items = [
     {"name": "Pasture Raised Eggs", "description": "Quadruple the cookies. Quadruple the addiction.", "price": 25000},
     {"name": "Organic Butter", "description": "Get two cookies per click!", "price": 100},
     {"name": "Chocolate Chips", "description": "Get five cookies per click!", "price": 2500},
-    {"name": "Macadamia Nuts", "description": "Get ten cookies per click!", "price": 10000}
+    {"name": "Macadamia Nuts", "description": "Get ten cookies per click!", "price": 10000},
+    {"name": "Chance Formula", "description": "Unlock Super Bonus!", "price": 100000}
 ]
 
 # Insert items into the shop table if they don't already exist

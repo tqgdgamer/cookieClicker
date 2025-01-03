@@ -71,6 +71,7 @@ class CCButton(discord.ui.View):
         owner_id = get_cc_user(self.button_id)
 
         bonus = random.randint(1, 1000000)
+        super_bonus = False
 
         if interaction.user.id == owner_id:
             user_id = interaction.user.id
@@ -104,6 +105,9 @@ class CCButton(discord.ui.View):
                 elif item_id == 4:
                     value = 2
 
+                if item_id == 7:
+                    super_bonus = True
+
             score += value * multiplier
 
             add_or_update_user(user_id, username, score)
@@ -116,7 +120,52 @@ class CCButton(discord.ui.View):
             
             await interaction.response.edit_message(embed=embed)
 
-            if bonus <= 1000:
+            if bonus == 1 and super_bonus is True:
+                bonus_score = random.randint(100001, 1000000)
+                score += bonus_score
+
+                add_or_update_user(user_id, username, score)
+
+                bonus_embed = discord.Embed(
+                    title="Super Bonus!!",
+                    description=f"\n\n<:alert:1287522413935853721> Rarity: **Mythical** | 0.0001% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
+                    colour=discord.Colour.yellow()
+                )
+
+                await interaction.followup.send(embed=bonus_embed, ephemeral=True)
+                print(f"Mythical Alert | User: {username} | ID: {user_id} | Score: {score} | Super Bonus: {bonus_score}")
+
+            elif bonus <= 10 and super_bonus is True:
+                bonus_score = random.randint(10001, 100000)
+                score += bonus_score
+
+                add_or_update_user(user_id, username, score)
+
+                bonus_embed = discord.Embed(
+                    title="Super Bonus!!",
+                    description=f"\n\n<:alert:1287522413935853721> Rarity: **Legendary** | 0.001% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
+                    colour=discord.Colour.yellow()
+                )
+
+                await interaction.followup.send(embed=bonus_embed, ephemeral=True)
+                print(f"Legendary Alert | User: {username} | ID: {user_id} | Score: {score} | Super Bonus: {bonus_score}")
+
+            elif bonus <= 100 and super_bonus is True:
+                bonus_score = random.randint(1001, 10000)
+                score += bonus_score
+
+                add_or_update_user(user_id, username, score)
+
+                bonus_embed = discord.Embed(
+                    title="Super Bonus!!",
+                    description=f"\n\n<:alert:1287522413935853721> Rarity: **Epic** | 0.01% Chance\n\nYou earned an additional **{bonus_score}** cookies!",
+                    colour=discord.Colour.yellow()
+                )
+
+                await interaction.followup.send(embed=bonus_embed, ephemeral=True)
+                print(f"Epic Alert | User: {username} | ID: {user_id} | Score: {score} | Super Bonus: {bonus_score}")
+
+            elif bonus <= 1000:
                 bonus_score = random.randint(101, 1000)
                 score += bonus_score
 
