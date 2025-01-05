@@ -100,21 +100,6 @@ class leaderboard(commands.Cog):
         self.client = client
         self.leaderboard_data = []
         self.leaderboard_message = None
-        self.update_leaderboard.start()
-
-    @tasks.loop(minutes=10)
-    async def update_leaderboard(self):
-        try:
-            self.leaderboard_data = fetch_leaderboard()
-
-            if self.leaderboard_message:
-                await self.update_leaderboard_message()
-                print("Updated leaderboard.")
-                
-            else:
-                print("Leaderboard message not found.")
-        except Exception as e:
-            print(f"Error updating leaderboard: {e}")
 
     async def update_leaderboard_message(self):
         try:
@@ -139,11 +124,6 @@ class leaderboard(commands.Cog):
 
         except Exception as e:
             print(f"Error updating leaderboard message: {e}")
-
-    @update_leaderboard.before_loop
-    async def before_update_leaderboard(self):
-        print("Waiting for bot to come online before leaderboard update...")
-        await self.client.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_ready(self):
