@@ -17,7 +17,7 @@ class stats(commands.Cog):
         print("stats.py is active!")
 
     @app_commands.command(name = "stats", description="Pull a player's data.")
-    async def ping(self, interaction: discord.Interaction, user: discord.User = None):
+    async def stats(self, interaction: discord.Interaction, user: discord.User = None):
 
         if user is None:
             user_name = interaction.user.name
