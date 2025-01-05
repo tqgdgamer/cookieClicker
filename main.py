@@ -76,7 +76,8 @@ class cookieClicker(commands.Bot):
         super().__init__(
             command_prefix = 'cc.',
             intents = discord.Intents.all(),
-            application_id = 1285399074056573020)   
+            application_id = os.getenv("APPLICATION_ID")
+            )   
 
     async def setup_hook(self):
         self.purge_task.start()
