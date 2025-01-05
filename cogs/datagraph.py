@@ -21,41 +21,42 @@ client = commands.Bot(command_prefix="cc.", intents=discord.Intents.all())
 conn = sqlite3.connect('users.db')
 cursor = conn.cursor()
 
-cookie_values = "SELECT score FROM users ORDER BY score DESC LIMIT 30"
-df = pd.read_sql_query(cookie_values, conn)
+def graph():
 
-y = df['score']
-x = range(1, len(y)+1)
+    cookie_values = "SELECT score FROM users ORDER BY score DESC LIMIT 30"
+    df = pd.read_sql_query(cookie_values, conn)
 
-font_path = f'{os.getenv("FONT_PATH")}'
+    y = df['score']
+    x = range(1, len(y)+1)
 
-custom_font = fm.FontProperties(fname=font_path)
+    font_path = f'{os.getenv("FONT_PATH")}'
 
-plt.style.use("cyberpunk")
+    custom_font = fm.FontProperties(fname=font_path)
 
-plt.figure(figsize=(10, 5))
-plt.plot(x, y, marker='o', color='#08F7FE')  
+    plt.style.use("cyberpunk")
 
-plt.title(f'TOP COOKIE CLICKERS', fontproperties=custom_font, fontsize=20)
-plt.xlabel('RANK', fontproperties=custom_font)
-plt.ylabel('COOKIES', fontproperties=custom_font)
-plt.tick_params(colors='#AAAAAA')
+    plt.figure(figsize=(10, 5))
+    plt.plot(x, y, marker='o', color='#08F7FE')  
 
-ax = plt.gca()
-ax.grid(color='#2A3459')
-ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-ax.set_yscale('log')
+    plt.title(f'TOP COOKIE CLICKERS', fontproperties=custom_font, fontsize=20)
+    plt.xlabel('RANK', fontproperties=custom_font)
+    plt.ylabel('COOKIES', fontproperties=custom_font)
+    plt.tick_params(colors='#AAAAAA')
 
-for label in ax.get_xticklabels():
-    label.set_fontproperties(custom_font)
-for label in ax.get_yticklabels():
-    label.set_fontproperties(custom_font)
+    ax = plt.gca()
+    ax.grid(color='#2A3459')
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax.set_yscale('log')
 
-mplcyberpunk.add_glow_effects()
+    for label in ax.get_xticklabels():
+        label.set_fontproperties(custom_font)
+    for label in ax.get_yticklabels():
+        label.set_fontproperties(custom_font)
 
-image_path = 'cookie_graph.png'
+    mplcyberpunk.add_glow_effects()
 
-conn.close()
+    image_path = 'cookie_graph.png'
+    return y, image_path
 
 class datagraph(commands.Cog):
     def __init__(self, client):
@@ -67,6 +68,8 @@ class datagraph(commands.Cog):
 
     @app_commands.command(name = "datagraph", description="User graph of the top players")
     async def datagraph(self, interaction: discord.Interaction):
+
+        y, image_path = graph()
 
         plt.savefig(image_path, dpi=300)
 
