@@ -79,11 +79,26 @@ class stats(commands.Cog):
             if super_bonus is True:
                 super_bonus_icon = "<:checkmark:1287522486845575261>"
 
+            cursor.execute('SELECT user_id FROM users ORDER BY score DESC')
+            users = cursor.fetchall()
+            position = [i+1 for i, u in enumerate(users) if u[0] == user_id][0]
+
+            medal = ""
+            if position == 1:
+                medal = ":first_place:"
+                position = ""
+            elif position == 2:
+                medal = ":second_place:"
+                position = ""
+            elif position == 3:
+                medal = ":third_place:"
+                position = ""
+
         except sqlite3.Error as e:
             print(f"Database error: {e}")
 
         embed = discord.Embed(
-            description = f"# {user_name}'s Stats\n<:alert:1287522413935853721> **Cookies:** {score[0]}\n## Best Cookie Buffs:\n**Chance Formula** | {super_bonus_icon}\n**{name_m}** | Multiplier: **{multiplier}x**\n**{name_v}** | Cookies Per Click: **{value} cookies**",
+            description = f"# {user_name}'s Stats\n<:alert:1287522413935853721> **Cookies:** {score[0]}\n\n<:alert:1287522413935853721> **Leaderboard Position:** {position}{medal}\n## Best Cookie Buffs:\n**Chance Formula** | {super_bonus_icon}\n**{name_m}** | Multiplier: **{multiplier}x**\n**{name_v}** | Cookies Per Click: **{value} cookies**",
             colour = discord.Colour.from_str("#ff6b00")
         )
 
