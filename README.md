@@ -18,6 +18,7 @@ Made with [discord.py](https://github.com/Rapptz/discord.py)
 | Ping | ✅ |
 | Shop | ✅ |
 | Stats | ✅ |
+| Datagraph | ✅ | 
 
 
 * Run `git clone https://github.com/tqgdgamer/cookieClicker.git` to clone the repository.
