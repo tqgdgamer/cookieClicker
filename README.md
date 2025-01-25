@@ -1,4 +1,4 @@
-## Cookie Clicker
+# Cookie Clicker
 A simulation game on discord for you to feel the satisfaction of your cookies increase at every click.
 
 [Add the bot](https://discord.com/oauth2/authorize?client_id=1285399074056573020) to your server to continue the addiction! Aim high and reach the top of the leaderboards.
@@ -13,12 +13,12 @@ Made with [discord.py](https://github.com/Rapptz/discord.py)
 
 | Feature Name                | Implemented  |
 |------------------------  |--------------|
+| Datagraph | ✅ | 
 | Leaderboard | ✅ |
-| Play | ✅ |
 | Ping | ✅ |
+| Play | ✅ |
 | Shop | ✅ |
 | Stats | ✅ |
-| Datagraph | ✅ | 
 
 
 * Run `git clone https://github.com/tqgdgamer/cookieClicker.git` to clone the repository.
