@@ -21,7 +21,7 @@ client = commands.Bot(command_prefix="cc.", intents=discord.Intents.all())
 conn = sqlite3.connect('users.db')
 cursor = conn.cursor()
 
-def graph():
+def graph(scaling: str):
 
     cookie_values = "SELECT score FROM users ORDER BY score DESC LIMIT 30"
     df = pd.read_sql_query(cookie_values, conn)
@@ -46,7 +46,7 @@ def graph():
     ax = plt.gca()
     ax.grid(color='#2A3459')
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.set_yscale('log')
+    ax.set_yscale(scaling)
 
     for label in ax.get_xticklabels():
         label.set_fontproperties(custom_font)
@@ -66,10 +66,16 @@ class datagraph(commands.Cog):
     async def on_ready(self):
         print("datagraph.py is active!")
 
-    @app_commands.command(name = "datagraph", description="User graph of the top players")
-    async def datagraph(self, interaction: discord.Interaction):
-
-        y, image_path = graph()
+    @app_commands.command(name="datagraph", description="User graph of the top players")
+    @app_commands.describe(scaling="Type of scaling to use")
+    @app_commands.choices(scaling=[
+        app_commands.Choice(name="Linear", value="linear"),
+        app_commands.Choice(name="Logarithmic", value="log")
+    ])
+    
+    async def datagraph(self, interaction: discord.Interaction, scaling: str):
+            
+        y, image_path = graph(scaling)
 
         plt.savefig(image_path, dpi=300)
 
