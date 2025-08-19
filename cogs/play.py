@@ -4,6 +4,7 @@ from discord import app_commands
 import sqlite3
 import uuid
 import random
+import requests
 
 client = commands.Bot(command_prefix="cc.", intents=discord.Intents.all())
 
@@ -70,7 +71,9 @@ class CCButton(discord.ui.View):
 
         owner_id = get_cc_user(self.button_id)
 
-        bonus = random.randint(1, 1000000)
+        url = "https://www.random.org/integers/?num=1&min=1&max=1000000&col=1&base=10&format=plain"
+
+        bonus = int(requests.get(url).text)
         super_bonus = False
 
         if interaction.user.id == owner_id:
@@ -121,7 +124,7 @@ class CCButton(discord.ui.View):
             await interaction.response.edit_message(embed=embed)
 
             if bonus == 1 and super_bonus is True:
-                bonus_score = random.randint(100001, 1000000)
+                bonus_score = int(requests.get("https://www.random.org/integers/?num=1&min=100001&max=1000000&col=1&base=10&format=plain").text)
                 score += bonus_score
 
                 add_or_update_user(user_id, username, score)
@@ -136,7 +139,7 @@ class CCButton(discord.ui.View):
                 print(f"Mythical Alert | User: {username} | ID: {user_id} | Score: {score} | Super Bonus: {bonus_score}")
 
             elif bonus <= 10 and super_bonus is True:
-                bonus_score = random.randint(10001, 100000)
+                bonus_score = int(requests.get("https://www.random.org/integers/?num=1&min=10001&max=100000&col=1&base=10&format=plain").text)
                 score += bonus_score
 
                 add_or_update_user(user_id, username, score)
@@ -151,7 +154,7 @@ class CCButton(discord.ui.View):
                 print(f"Legendary Alert | User: {username} | ID: {user_id} | Score: {score} | Super Bonus: {bonus_score}")
 
             elif bonus <= 100 and super_bonus is True:
-                bonus_score = random.randint(1001, 10000)
+                bonus_score = int(requests.get("https://www.random.org/integers/?num=1&min=1001&max=10000&col=1&base=10&format=plain").text)
                 score += bonus_score
 
                 add_or_update_user(user_id, username, score)
@@ -166,7 +169,7 @@ class CCButton(discord.ui.View):
                 print(f"Epic Alert | User: {username} | ID: {user_id} | Score: {score} | Super Bonus: {bonus_score}")
 
             elif bonus <= 1000:
-                bonus_score = random.randint(101, 1000)
+                bonus_score = int(requests.get("https://www.random.org/integers/?num=1&min=101&max=1000&col=1&base=10&format=plain").text)
                 score += bonus_score
 
                 add_or_update_user(user_id, username, score)
@@ -180,7 +183,7 @@ class CCButton(discord.ui.View):
                 await interaction.followup.send(embed=bonus_embed, ephemeral=True)
 
             elif bonus <= 10000:
-                bonus_score = random.randint(11, 100)
+                bonus_score = int(requests.get("https://www.random.org/integers/?num=1&min=11&max=100&col=1&base=10&format=plain").text)
                 score += bonus_score
 
                 add_or_update_user(user_id, username, score)
@@ -194,7 +197,7 @@ class CCButton(discord.ui.View):
                 await interaction.followup.send(embed=bonus_embed, ephemeral=True)
 
             elif bonus <= 100000:
-                bonus_score = random.randint(2, 10)
+                bonus_score = int(requests.get("https://www.random.org/integers/?num=1&min=2&max=10&col=1&base=10&format=plain").text)
                 score += bonus_score
 
                 add_or_update_user(user_id, username, score)
