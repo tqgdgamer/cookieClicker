@@ -11,14 +11,17 @@ Made with [discord.py](https://github.com/Rapptz/discord.py)
 
 ## Key Features
 
-| Feature Name                | Implemented  |
-|------------------------  |--------------|
-| Datagraph | ✅ | 
-| Leaderboard | ✅ |
-| Ping | ✅ |
-| Play | ✅ |
-| Shop | ✅ |
-| Stats | ✅ |
+| Feature Name             | Implemented  |
+|--------------------------|--------------|
+| Datagraph                | ✅ | 
+| Leaderboard              | ✅ |
+| Ping                     | ✅ |
+| Play                     | ✅ |
+| Shop                     | ✅ |
+| Stats                    | ✅ |
+| Gambling                 | ℹ️ |
+| Slots                    | ✅ |
+| Higher or Lower (Hilo)   | ✅ |
 
 
 * Run `git clone https://github.com/tqgdgamer/cookieClicker.git` to clone the repository.
