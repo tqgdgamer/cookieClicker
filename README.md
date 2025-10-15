@@ -19,7 +19,7 @@ Made with [discord.py](https://github.com/Rapptz/discord.py)
 | Play                     | ✅ |
 | Shop                     | ✅ |
 | Stats                    | ✅ |
-| Gambling                 | ℹ️ |
+| [Gambling](https://github.com/tqgdgamer/cookieClicker/blob/main/virtualbetting.md) | ℹ️ |
 | Slots                    | ✅ |
 | Higher or Lower (Hi-Lo)  | ✅ |
 | Guess the Number (GTN)   | ✅ |
