@@ -21,7 +21,8 @@ Made with [discord.py](https://github.com/Rapptz/discord.py)
 | Stats                    | ✅ |
 | Gambling                 | ℹ️ |
 | Slots                    | ✅ |
-| Higher or Lower (Hilo)   | ✅ |
+| Higher or Lower (Hi-Lo)  | ✅ |
+| Guess the Number (GTN)   | ✅ |
 
 
 * Run `git clone https://github.com/tqgdgamer/cookieClicker.git` to clone the repository.
