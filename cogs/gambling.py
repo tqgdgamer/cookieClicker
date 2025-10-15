@@ -270,72 +270,183 @@ class Gambling(commands.Cog):
         elif not score:
             pass
 
-        current_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
-        new_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
-        roundnum = 0
-        winnings = bet
+        else:
 
-        embed = discord.Embed(
-            title="Higher or Lower",
-            description=f"Will the next number be higher than {current_number}?\n\n**Current Prize:**\n**{bet}** cookies",
-            colour=discord.Colour.from_str("#ffcc32"),
-        )
+            if bet < 10:
+                errorEmbed = discord.Embed(
+                    title='Error',
+                    description='<:error:1285808346573836289> The minimum bet is 10 cookies.',
+                    colour=discord.Colour.red()
+                )
+                await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
+                return
+            
+            if bet > 100000000:
+                errorEmbed = discord.Embed(
+                    title='Error',
+                    description='<:error:1285808346573836289> The maximum bet is 100,000,000 cookies.',
+                    colour=discord.Colour.red()
+                )
+                await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
+                return
 
-        embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+            current_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
+            new_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
+            roundnum = 0
+            winnings = bet
 
-        score -= bet
-        add_or_update_user(user_id, username, score)
+            embed = discord.Embed(
+                title="Higher or Lower",
+                description=f"Will the next number be higher than {current_number}?\n\n**Current Prize:**\n**{bet}** cookies",
+                colour=discord.Colour.from_str("#ffcc32"),
+            )
+
+            embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+
+            score -= bet
+            add_or_update_user(user_id, username, score)
 
 
 
-        class buttons(discord.ui.View):
-            def __init__(self, button_id):
-                super().__init__(timeout=None)
-                self.button_id = button_id
-                self.value = None
-                
-            @discord.ui.button(label="Higher", style=discord.ButtonStyle.green, custom_id='h')
-            async def higher(self, interaction: discord.Interaction,  button: discord.ui.Button):
+            class buttons(discord.ui.View):
+                def __init__(self, button_id):
+                    super().__init__(timeout=None)
+                    self.button_id = button_id
+                    self.value = None
+                    
+                @discord.ui.button(label="Higher", style=discord.ButtonStyle.green, custom_id='h')
+                async def higher(self, interaction: discord.Interaction,  button: discord.ui.Button):
 
-                owner_id = self.button_id
+                    owner_id = self.button_id
 
-                if interaction.user.id == owner_id:
-                    nonlocal new_number
-                    nonlocal current_number
-                    nonlocal roundnum
-                    nonlocal bet
-                    nonlocal winnings
+                    if interaction.user.id == owner_id:
+                        nonlocal new_number
+                        nonlocal current_number
+                        nonlocal roundnum
+                        nonlocal bet
+                        nonlocal winnings
 
-                    roundnum += 1
+                        roundnum += 1
 
-                    if new_number > current_number:
-                        if roundnum <= 5:
-                            winnings = trunc(round(bet * (1.1**roundnum + 0.1*roundnum**2),0))
+                        if new_number > current_number:
+                            if roundnum <= 5:
+                                winnings = trunc(round(bet * (1.1**roundnum + 0.1*roundnum**2),0))
 
-                        elif roundnum > 5:
-                            winnings = trunc(round(bet*(1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)),0))
+                            elif roundnum > 5:
+                                winnings = trunc(round(bet*(1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)),0))
 
-                        current_number = new_number
-                        new_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
+                            current_number = new_number
+                            new_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
 
-                        embed = discord.Embed(
-                            title="Higher or Lower",
-                            description=f"Will the next number be higher than {current_number}?\n\n**Current Prize:**\n**{winnings}** cookies ‧ *Multiplier: {round((1.1**roundnum + 0.1*roundnum**2),2) if roundnum <= 5 else round((1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)),2)}*",
-                            colour=discord.Colour.from_str("#32cd32"),
-                        )
+                            embed = discord.Embed(
+                                title="Higher or Lower",
+                                description=f"Will the next number be higher than {current_number}?\n\n**Current Prize:**\n**{winnings}** cookies ‧ *Multiplier: {round((1.1**roundnum + 0.1*roundnum**2),2) if roundnum <= 5 else round((1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)),2)}*",
+                                colour=discord.Colour.from_str("#32cd32"),
+                            )
 
-                        embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+                            embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
 
-                        await interaction.response.edit_message(embed=embed, view=self)
+                            await interaction.response.edit_message(embed=embed, view=self)
+
+                        else:
+                            embed = discord.Embed(
+                                title="Higher or Lower",
+                                description=f"You lost! The number was **{new_number}**.\n\n",
+                                colour=discord.Colour.red(),
+                            )
+
+                            embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+
+                            for item in self.children:
+                                item.disabled = True
+
+                            await interaction.response.edit_message(embed=embed, view=self)
+
+                            user_locks.remove(user_id)
 
                     else:
+                        errorEmbed = discord.Embed(
+                            title='Error',
+                            description='<:error:1285808346573836289> You can not click on the button!',
+                            colour=discord.Colour.red()
+                        )
+                        await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
+                @discord.ui.button(label="Lower", style=discord.ButtonStyle.red, custom_id='l')
+                async def lower(self, interaction: discord.Interaction,  button: discord.ui.Button):
+
+                    owner_id = self.button_id
+
+                    if interaction.user.id == owner_id:
+                        nonlocal new_number
+                        nonlocal current_number
+                        nonlocal roundnum
+                        nonlocal bet
+                        nonlocal winnings
+
+                        roundnum += 1
+
+                        if new_number < current_number:
+                            if roundnum <= 5:
+                                winnings = trunc(round(bet * round((1.1**roundnum + 0.1*roundnum**2), 2),0))
+
+                            elif roundnum > 5:
+                                winnings = trunc(round(bet*round((1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)), 2),0))
+                            current_number = new_number
+                            new_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
+
+                            embed = discord.Embed(
+                                title="Higher or Lower",
+                                description=f"Will the next number be higher than {current_number}?\n\n**Current Prize:**\n**{winnings}** cookies ‧ *Multiplier: {round((1.1**roundnum + 0.1*roundnum**2),2) if roundnum <= 5 else round((1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)),2)}*",
+                                colour=discord.Colour.from_str("#32cd32"),
+                            )
+
+                            embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+
+                            await interaction.response.edit_message(embed=embed, view=self)
+
+                        else:
+                            embed = discord.Embed(
+                                title="Higher or Lower",
+                                description=f"You lost! The number was **{new_number}**.\n\n",
+                                colour=discord.Colour.red(),
+                            )
+
+                            embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+
+                            for item in self.children:
+                                item.disabled = True
+
+                            await interaction.response.edit_message(embed=embed, view=self)
+
+                            user_locks.remove(user_id)
+
+                    else:
+                        errorEmbed = discord.Embed(
+                            title='Error',
+                            description='<:error:1285808346573836289> You can not click on the button!',
+                            colour=discord.Colour.red()
+                        )
+                        await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
+                @discord.ui.button(label="Redeem", style=discord.ButtonStyle.blurple, custom_id=':r')
+                async def redeem(self, interaction: discord.Interaction,  button: discord.ui.Button):
+
+                    owner_id = self.button_id
+
+                    if interaction.user.id == owner_id:
+                        nonlocal bet
+                        nonlocal username
+                        nonlocal roundnum
+                        nonlocal winnings
+
                         embed = discord.Embed(
                             title="Higher or Lower",
-                            description=f"You lost! The number was **{new_number}**.\n\n",
-                            colour=discord.Colour.red(),
+                            description=f"<:alert:1287522413935853721> You have redeemed your winnings and leave with **{winnings}** cookies.",
+                            colour=discord.Colour.gold(),
                         )
 
                         embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+
+                        add_or_update_user(user_id, username, score + winnings)
 
                         for item in self.children:
                             item.disabled = True
@@ -344,106 +455,261 @@ class Gambling(commands.Cog):
 
                         user_locks.remove(user_id)
 
-                else:
-                    errorEmbed = discord.Embed(
-                        title='Error',
-                        description='<:error:1285808346573836289> You can not click on the button!',
-                        colour=discord.Colour.red()
-                    )
-                    await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
-            @discord.ui.button(label="Lower", style=discord.ButtonStyle.red, custom_id='l')
-            async def lower(self, interaction: discord.Interaction,  button: discord.ui.Button):
+                    else:
+                        errorEmbed = discord.Embed(
+                            title='Error',
+                            description='<:error:1285808346573836289> You can not click on the button!',
+                            colour=discord.Colour.red()
+                        )
+                        await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
 
-                owner_id = self.button_id
+            await interaction.response.send_message(embed=embed, view=buttons(interaction.user.id))
 
-                if interaction.user.id == owner_id:
-                    nonlocal new_number
-                    nonlocal current_number
-                    nonlocal roundnum
-                    nonlocal bet
-                    nonlocal winnings
+    # guess the number
+    @app_commands.command(name="gtn", description="Play guess the number.")
+    @app_commands.describe(bet="Amount of cookies to bet (>= 10)")
+    async def gtn(self, interaction: discord.Interaction, bet: int):
+        user = interaction.user
+        user_id = user.id
+        username = user.name
 
-                    roundnum += 1
+        if bet < 10:
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    title="Error",
+                    description="<:error:1285808346573836289> The minimum bet is 10 cookies.",
+                    colour=discord.Colour.red(),
+                ),
+                ephemeral=True,
+            )
+            return
 
-                    if new_number < current_number:
-                        if roundnum <= 5:
-                            winnings = trunc(round(bet * round((1.1**roundnum + 0.1*roundnum**2), 2),0))
+        score = get_user_stats(user_id)
+        if score is None:
+            score = 0
 
-                        elif roundnum > 5:
-                            winnings = trunc(round(bet*round((1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)), 2),0))
-                        current_number = new_number
-                        new_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
+        if score < bet:
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    title="Error",
+                    description="<:error:1285808346573836289> You do not have enough cookies to make that bet.",
+                    colour=discord.Colour.red(),
+                ),
+                ephemeral=True,
+            )
+            return
 
+        if user_id in user_locks:
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    title="Error",
+                    description="<:error:1285808346573836289> You are already in a game! Please finish your current game first.",
+                    colour=discord.Colour.red(),
+                ),
+                ephemeral=True,
+            )
+            return
+        
+        user_locks.add(user_id)
+
+        try:
+            score -= bet
+            add_or_update_user(user_id, username, score)
+
+            target_number = int(requests.get("https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain").text)
+            max_attempts = 5
+
+            class GuessModal(discord.ui.Modal, title="Guess The Number"):
+                user_id_modal: int = user_id 
+
+                guess_input = discord.ui.TextInput(
+                    label="Enter a number between 1 and 100",
+                    placeholder="Your guess...",
+                    max_length=3,
+                    required=True
+                )
+
+                def __init__(self, view_ref: "GuessView"):
+                    super().__init__(timeout=120)
+                    self.view_ref = view_ref
+
+                async def on_submit(self, modal_interaction: discord.Interaction):
+    
+                    if modal_interaction.user.id != self.view_ref.owner_id:
+                        await modal_interaction.response.send_message("This isn't your game.", ephemeral=True)
+                        return
+
+                    try:
+                        guess = int(str(self.guess_input.value).strip())
+                    except ValueError:
                         embed = discord.Embed(
-                            title="Higher or Lower",
-                            description=f"Will the next number be higher than {current_number}?\n\n**Current Prize:**\n**{winnings}** cookies ‧ *Multiplier: {round((1.1**roundnum + 0.1*roundnum**2),2) if roundnum <= 5 else round((1.1**5 + 0.1*5**2) * (1.05**(roundnum-5)),2)}*",
-                            colour=discord.Colour.from_str("#32cd32"),
+                            title="Guess The Number",
+                            description=(
+                                f"<:error:1285808346573836289> Invalid input! Please enter a valid integer between 1 and 100.\n\n"
+                                f"*You have {self.view_ref.max_attempts - self.view_ref.attempt} attempt{'s' if self.view_ref.max_attempts - self.view_ref.attempt != 1 else ''} left.*"
+                            ),
+                            colour=discord.Colour.from_str("#ffcc32"),
                         )
 
-                        embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
-
-                        await interaction.response.edit_message(embed=embed, view=self)
-
-                    else:
+                        await modal_interaction.response.send_message(
+                            embed=embed, ephemeral=True
+                        )
+                        return
+                    if not (1 <= guess <= 100):
                         embed = discord.Embed(
-                            title="Higher or Lower",
-                            description=f"You lost! The number was **{new_number}**.\n\n",
+                            title="Guess The Number",
+                            description=(
+                                f"<:error:1285808346573836289> Out of range! Please enter a number between 1 and 100.\n\n"
+                                f"*You have {self.view_ref.max_attempts - self.view_ref.attempt} attempt{'s' if self.view_ref.max_attempts - self.view_ref.attempt != 1 else ''} left.*"
+                            ),
+                            colour=discord.Colour.from_str("#ffcc32"),
+                        )
+                        await modal_interaction.response.send_message(
+                            embed=embed, ephemeral=True
+                        )
+                        return
+
+                    self.view_ref.attempt += 1
+
+                    if guess == self.view_ref.number:
+                        attempts = self.view_ref.attempt
+                        winnings = round(bet * (6 - attempts) * 1.2, 0)
+
+                        new_score = get_user_stats(self.view_ref.owner_id) + winnings
+                        add_or_update_user(self.view_ref.owner_id, username, new_score)
+
+                        self.view_ref.disable_all()
+                        embed = discord.Embed(
+                            title="Guess The Number",
+                            description=(
+                                f"<:alert:1287522413935853721> You guessed **{self.view_ref.number}** correctly "
+                                f"in **{attempts}** {'attempt' if attempts == 1 else 'attempts'}!\n\n"
+                                f"You win **{trunc(winnings)}** cookies!"
+                            ),
+                            colour=discord.Colour.yellow(),
+                        )
+                        embed.set_footer(
+                            text=f"Attempt {attempts}/{self.view_ref.max_attempts} ‧ Requested by {username}",
+                            icon_url=interaction.user.display_avatar.url,
+                        )
+                        await self.view_ref.message.edit(embed=embed, view=self.view_ref)
+                        embed2 = discord.Embed(
+                            description="<:checkmark:1287522486845575261> Your guess is correct!",
+                            colour = discord.Colour.green()
+                        )
+                        await modal_interaction.response.send_message(embed=embed2, ephemeral=True)
+
+                        user_locks.discard(self.view_ref.owner_id)
+                        return
+
+                    attempts_left = self.view_ref.max_attempts - self.view_ref.attempt
+                    if attempts_left > 0:
+                        hint = "higher" if guess > self.view_ref.number else "lower"
+                        embed = discord.Embed(
+                            title="Guess The Number",
+                            description=(
+                                f"<:alert:1287522413935853721> Your guess **{guess}** is **{hint}** than the target number.\n\n"
+                                f"*You have {attempts_left} attempt{'s' if attempts_left != 1 else ''} left.*"
+                            ),
+                            colour=discord.Colour.from_str("#ffcc32"),
+                        )
+                        embed.set_footer(
+                            text=f"Attempt {self.view_ref.attempt}/{self.view_ref.max_attempts} ‧ Requested by {username}",
+                            icon_url=interaction.user.display_avatar.url,
+                        )
+                        await self.view_ref.message.edit(embed=embed, view=self.view_ref)
+
+                        embed2 = discord.Embed(
+                            description="<:error:1285808346573836289> Your guess is incorrect. Try again!",
+                            colour = discord.Colour.red()
+                        )
+                        await modal_interaction.response.send_message(embed=embed2, ephemeral=True)
+                    else:
+                        self.view_ref.disable_all()
+                        embed = discord.Embed(
+                            title="Guess The Number",
+                            description=(
+                                f"<:error:1285808346573836289> Out of attempts! The number was **{self.view_ref.number}**.\n\n"
+                                f"**Cookies lost:** {bet}"
+                            ),
                             colour=discord.Colour.red(),
                         )
+                        embed.set_footer(
+                            text=f"Attempt {self.view_ref.attempt}/{self.view_ref.max_attempts} ‧ Requested by {username}",
+                            icon_url=interaction.user.display_avatar.url,
+                        )
+                        await self.view_ref.message.edit(embed=embed, view=self.view_ref)
+                        embed2 = discord.Embed(
+                            description="<:error:1285808346573836289> Game over.",
+                            colour = discord.Colour.red()
+                        )
+                        await modal_interaction.response.send_message(embed=embed2, ephemeral=True)
 
-                        embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+                        # unlock
+                        user_locks.discard(self.view_ref.owner_id)
 
-                        for item in self.children:
-                            item.disabled = True
+            class GuessView(discord.ui.View):
+                def __init__(self, owner_id: int, number: int, max_attempts: int):
+                    super().__init__(timeout=300)
+                    self.owner_id = owner_id
+                    self.number = number
+                    self.attempt = 0
+                    self.max_attempts = max_attempts
+                    self.message: discord.Message | None = None
 
-                        await interaction.response.edit_message(embed=embed, view=self)
+                def disable_all(self):
+                    for child in self.children:
+                        if isinstance(child, discord.ui.Button):
+                            child.disabled = True
 
-                        user_locks.remove(user_id)
+                async def on_timeout(self):
+                    self.disable_all()
+                    if self.message:
+                        try:
+                            await self.message.edit(view=self)
+                        except Exception:
+                            pass
+                    user_locks.discard(self.owner_id)
 
-                else:
-                    errorEmbed = discord.Embed(
-                        title='Error',
-                        description='<:error:1285808346573836289> You can not click on the button!',
-                        colour=discord.Colour.red()
-                    )
-                    await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
-            @discord.ui.button(label="Redeem", style=discord.ButtonStyle.blurple, custom_id=':r')
-            async def redeem(self, interaction: discord.Interaction,  button: discord.ui.Button):
+                @discord.ui.button(label="Guess", style=discord.ButtonStyle.primary)
+                async def btn_guess(self, btn_inter: discord.Interaction, button: discord.ui.Button):
+                    if btn_inter.user.id != self.owner_id:
+                        await btn_inter.response.send_message("This isn't your game.", ephemeral=True)
+                        return
+                    await btn_inter.response.send_modal(GuessModal(self))
 
-                owner_id = self.button_id
-
-                if interaction.user.id == owner_id:
-                    nonlocal bet
-                    nonlocal username
-                    nonlocal roundnum
-                    nonlocal winnings
-
+                @discord.ui.button(label="Give Up", style=discord.ButtonStyle.secondary)
+                async def btn_giveup(self, btn_inter: discord.Interaction, button: discord.ui.Button):
+                    if btn_inter.user.id != self.owner_id:
+                        await btn_inter.response.send_message("This isn't your game.", ephemeral=True)
+                        return
+                    self.disable_all()
                     embed = discord.Embed(
-                        title="Higher or Lower",
-                        description=f"<:alert:1287522413935853721> You have redeemed your winnings and leave with **{winnings}** cookies.",
-                        colour=discord.Colour.gold(),
+                        title="Guess The Number",
+                        description=f"You gave up! The number was **{self.number}**.\n**Cookies lost:** {bet}",
+                        colour=discord.Colour.red(),
                     )
+                    await btn_inter.response.edit_message(embed=embed, view=self)
+                    user_locks.discard(self.owner_id)
 
-                    embed.set_footer(text=f"Round {roundnum} ‧ Requested by {username}", icon_url=interaction.user.display_avatar.url)
+            view = GuessView(owner_id=user_id, number=target_number, max_attempts=max_attempts)
+            intro = discord.Embed(
+                title="Guess The Number",
+                description=(
+                    "I have selected a number between **1** and **100**.\n"
+                    "Can you guess what it is?\n\n"
+                    f"*You have **{max_attempts}** attempts.*\n"
+                    f"**Bet:** {bet} <:1_:1427051665525309512>"
+                ),
+                colour=discord.Colour.from_str("#ffcc32"),
+            )
+            await interaction.response.send_message(embed=intro, view=view)
+            sent = await interaction.original_response()
+            view.message = sent
 
-                    add_or_update_user(user_id, username, score + winnings)
-
-                    for item in self.children:
-                        item.disabled = True
-
-                    await interaction.response.edit_message(embed=embed, view=self)
-
-                    user_locks.remove(user_id)
-
-                else:
-                    errorEmbed = discord.Embed(
-                        title='Error',
-                        description='<:error:1285808346573836289> You can not click on the button!',
-                        colour=discord.Colour.red()
-                    )
-                    await interaction.response.send_message(embed=errorEmbed, ephemeral=True)
-
-        await interaction.response.send_message(embed=embed, view=buttons(interaction.user.id))
+        finally:
+            if user_id in user_locks and (not interaction.response.is_done()):
+                user_locks.discard(user_id)
 
 
 
